@@ -2,14 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {makeGrid ,addMines, revealMines, updateCells} from './helpers/helpers'
+import { makeGrid, addMines, revealMines, updateGrid } from './helpers/helpers'
 
 
 const result = (makeGrid(10, 10))
-const addMinesResult = addMines(result,{x:5,y:7},50) 
-const result2 = revealMines({x:9,y:5},addMinesResult);
-console.log(result2,"result2")
-console.log(updateCells(result2,result))
+const addMinesResult = addMines(result, { x: 5, y: 7 ,isMine:false}, 5)
+
+const revealedMines = revealMines({ y: 5, x: 9 }, addMinesResult);
+console.log(revealedMines, "revealed mines")
+//console.log(updateGrid(result2,result),"updateGrid")
 
 ReactDOM.render(
   <React.StrictMode>
