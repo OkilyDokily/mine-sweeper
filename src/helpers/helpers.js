@@ -1,4 +1,4 @@
-import { range, sampleSize, flatten} from 'lodash'
+import { range, sampleSize, flatten } from 'lodash'
 
 export function makeGrid(x, y) {
   return range(y).map((i, index) => range(x).map((j, index2) => ({ y: index, x: index2, revealed: false, flagNumber: 0, isMine: false })));
@@ -25,7 +25,7 @@ export function getNeighbors({ x, y }, grid) {
     getCellAt(x, y + 1, grid),
     getCellAt(x - 1, y + 1, grid)
   ].filter(cell => cell !== null);
- 
+
   return neighbors;
 }
 
@@ -40,32 +40,40 @@ export function countMines(neighbors) {
   return neighbors.filter(cell => cell.isMine).length;
 }
 
-let visited = [];
+
 
 export function revealMines(cell, grid) {
-  if (cell.isMine) {
-    return "game over";
+  let visited = [];
+  function go(cell, grid) {
+    if (cell.isMine) {
+      return "game over";
+    }
+    if (visited.some(c => cell.x === c.x && cell.y === c.y)) {
+      return [];
+    }
+
+    const neighbors = getNeighbors(cell, grid);
+    const count = countMines(neighbors);
+    cell.flagNumber = count;
+
+    visited.push({ ...cell });
+
+    const filteredNeighbor = neighbors.filter(cell => !cell.isMine && !(visited.some(c => cell.x === c.x && cell.y === c.y)))
+
+    if (count === 0) {
+      return [{ ...cell }].concat(flatten(filteredNeighbor.map(cell => go(cell, grid))))
+    }
+    else {
+      return [{ ...cell }]
+    }
   }
-  if (visited.some(c => cell.x === c.x && cell.y === c.y)) {
-    return [];
-  }
 
-  const neighbors = getNeighbors(cell, grid);
-  const count = countMines(neighbors);
-  cell.flagNumber = count;
+  return go(cell,grid)
+}
 
-  visited.push({ ...cell });
-
-  const filteredNeighbor = neighbors.filter(cell => !cell.isMine && !(visited.some(c => cell.x === c.x && cell.y === c.y)))
-
-  if (count === 0) {
-
-    return [{ ...cell }].concat(flatten(filteredNeighbor.map(cell => revealMines(cell, grid))))
-  }
-  else {
-    return [{ ...cell }]
-  }
-
+export function showGameOver(grid){
+  return [...grid.map((row) => row.map((cell) =>
+    cell.isMine ? { ...cell, revealed: true } : cell))]
 }
 
 export function updateGrid(revealedMines, grid) {
