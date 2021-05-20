@@ -1,13 +1,13 @@
-import { range, sampleSize, flatten, some } from 'lodash'
+import { range, sampleSize, flatten} from 'lodash'
 
-export function makeGrid(x, y, mines) {
+export function makeGrid(x, y) {
   return range(y).map((i, index) => range(x).map((j, index2) => ({ y: index, x: index2, revealed: false, flagNumber: 0, isMine: false })));
 }
 
 export function addMines(grid, doNot, mineCount) {
-  grid[doNot.y].splice(doNot.x,0);
+  grid[doNot.y].splice(doNot.x, 0);
   const results = sampleSize(flatten(grid), mineCount);
-  console.log(results,"sample grid")
+
 
   return [...grid.map((row, index) => row.map((cell, index2) =>
     results.some((value) => cell.x === value.x && cell.y === value.y)
@@ -25,7 +25,7 @@ export function getNeighbors({ x, y }, grid) {
     getCellAt(x, y + 1, grid),
     getCellAt(x - 1, y + 1, grid)
   ].filter(cell => cell !== null);
-  console.log(neighbors,"get neighbors")
+ 
   return neighbors;
 }
 
@@ -40,38 +40,36 @@ export function countMines(neighbors) {
   return neighbors.filter(cell => cell.isMine).length;
 }
 
-function getVisited(){
-  let visited = [];
-  return function(cell){
-    visited = [...visited,{...cell}];
-    return [...visited];
-  }
-};
+let visited = [];
+
 export function revealMines(cell, grid) {
   if (cell.isMine) {
     return "game over";
   }
-  console.log(cell,"cell")
+  if (visited.some(c => cell.x === c.x && cell.y === c.y)) {
+    return [];
+  }
+
   const neighbors = getNeighbors(cell, grid);
   const count = countMines(neighbors);
-  const visited = getVisited()
   cell.flagNumber = count;
-  visited({ ...cell });
-  console.log(visited(),"visited function")
-  const filteredNeighbor = neighbors.filter(cell => !cell.isMine && !(visited().some(c => cell.x === c.x && cell.y === c.y)))
-  console.log(filteredNeighbor, "filtered neighbor")
+
+  visited.push({ ...cell });
+
+  const filteredNeighbor = neighbors.filter(cell => !cell.isMine && !(visited.some(c => cell.x === c.x && cell.y === c.y)))
+
   if (count === 0) {
-  
-    //return [...flatten(filteredNeighbor.map(cell => revealMines(cell, grid))),{...cell}]
+
+    return [{ ...cell }].concat(flatten(filteredNeighbor.map(cell => revealMines(cell, grid))))
   }
-  else{
-      return {...cell}
+  else {
+    return [{ ...cell }]
   }
-  return
+
 }
 
 export function updateGrid(revealedMines, grid) {
-  return [...grid.map((row, index) => row.map((cell, index2) =>
+  return [...grid.map((row) => row.map((cell) =>
     revealedMines.some((value) => cell.x === value.x && cell.y === value.y)
-      ? { ...cell,revealed:true, flagNumber:cell.mineCount } : cell))]
+      ? { ...cell, revealed: true, flagNumber: cell.flagNumber } : cell))]
 }
