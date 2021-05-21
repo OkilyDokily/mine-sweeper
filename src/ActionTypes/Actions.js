@@ -2,7 +2,7 @@ import {MAKE_GRID,ADD_MINES,REVEAL_CELL_COUNT} from './ActionTypes';
 
 export function makeGrid(x,y){
   return {
-    action:MAKE_GRID,
+    type:MAKE_GRID,
     width:x,
     height:y
   }
@@ -10,15 +10,15 @@ export function makeGrid(x,y){
 
 export function addMines(doNot,mineCount) {
   return {
-    action: ADD_MINES,
+    type: ADD_MINES,
     doNot: doNot,
     mineCount:mineCount
   }
 }
 
-export function revealCellCount(doNot,cell) {
+export function revealCellCount(doNot) {
   return {
-    action: REVEAL_CELL_COUNT,
-    cell:cell
+    type: REVEAL_CELL_COUNT,
+    doNot: doNot,
   }
 }

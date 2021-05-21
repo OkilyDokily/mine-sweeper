@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-
-
+import {makeGrid} from './helpers/helpers'
+c
 ReactDOM.render(
   <React.StrictMode>
     <App />

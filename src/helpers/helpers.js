@@ -1,17 +1,21 @@
 import { range, sampleSize, flatten } from 'lodash'
 
 export function makeGrid(x, y) {
-  return range(y).map((i, index) => range(x).map((j, index2) => ({ y: index, x: index2, revealed: false, flagNumber: 0, isMine: false })));
+  return range(y).map((i) => range(x).map((j) => ({ y: i, x: j, revealed: false, flagNumber: 0, isMine: false })));
 }
 
-export function addMines(grid, doNot, mineCount) {
-  grid[doNot.y].splice(doNot.x, 0);
-  const results = sampleSize(flatten(grid), mineCount);
+export function getCell(x,y,grid){
+  return grid[y][x];
+}
+
+export function addMinesToGrid(grid, doNot, mineCount) {
+  let flattened = flatten(grid).filter( cell => cell.x !== doNot.x || cell.y !== doNot.y);
+  const results = sampleSize(flattened, mineCount);
 
 
-  return [...grid.map((row, index) => row.map((cell, index2) =>
+  return grid.map((row) => row.map((cell) =>
     results.some((value) => cell.x === value.x && cell.y === value.y)
-      ? { ...cell, isMine: true } : cell))]
+      ? { ...cell, isMine: true } : cell))
 }
 
 export function getNeighbors({ x, y }, grid) {

@@ -1,4 +1,4 @@
-import {makeGrid,addMines,revealMines,updateGrid,showGameOver} from '../helpers/helpers'
+import {makeGrid,addMinesToGrid,revealMines,updateGrid,showGameOver} from '../helpers/helpers'
 import {MAKE_GRID,ADD_MINES,REVEAL_CELL_COUNT} from '../ActionTypes/ActionTypes'
 
 const initial = {
@@ -11,9 +11,9 @@ function gameReducer(state = initial, action){
       case MAKE_GRID:
         return {...state,grid:makeGrid(action.width,action.height)}
       case ADD_MINES:
-        return {...state,grid:addMines(state.grid,action.doNot,action.mineCount)}
+        return {...state,grid:addMinesToGrid(state.grid,action.doNot,action.mineCount)}
       case REVEAL_CELL_COUNT:
-        const result = revealMines(action.cell, state.grid)
+        const result = revealMines(action.doNot, state.grid)
         if (result !== "game over"){
           return { ...state, grid: updateGrid(result, state.grid) }
         }
