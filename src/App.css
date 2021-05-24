@@ -1,38 +1,51 @@
-.App {
+#root{
+  margin-top: 30px;
+  margin:auto;
+}
+
+
+.cell{
+  width:20px;
+  height:20px;
+  border:1px solid black;
   text-align: center;
+  background-color: grey;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.revealed{
+  background-color: lightgrey;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.cell-1{
+  color:blue;
+}
+.cell-2{
+  color:red;
+}
+.cell-3{
+  color:green;
+}
+.cell-4{
+  color:purple;
+}
+.cell-5{
+  color:brown;
+}
+.cell-6{
+  color:teal
+}
+.cell-7{
+  color:darkgoldenrod
+}
+.cell-7{
+  color:tomato
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#minesweeper,#game,#app,#root{
+  max-width: fit-content
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.row{
+  display:flex;
+  max-width: fit-content
 }

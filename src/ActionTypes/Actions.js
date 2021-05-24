@@ -1,8 +1,8 @@
-import {MAKE_GRID,ADD_MINES,REVEAL_CELL_COUNT} from './ActionTypes';
+import {RESET_GRID,ADD_MINES,REVEAL_CELL_COUNT,APPLY_FLAG} from './ActionTypes';
 
-export function makeGrid(x,y){
+export function resetGrid(x,y){
   return {
-    type:MAKE_GRID,
+    type:RESET_GRID,
     width:x,
     height:y
   }
@@ -13,6 +13,13 @@ export function addMines(doNot,mineCount) {
     type: ADD_MINES,
     doNot: doNot,
     mineCount:mineCount
+  }
+}
+
+export function applyFlag(cell){
+  return {
+    type: APPLY_FLAG,
+    cell: cell
   }
 }
 

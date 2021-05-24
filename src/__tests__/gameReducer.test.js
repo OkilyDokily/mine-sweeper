@@ -1,5 +1,4 @@
-import { MAKE_GRID, ADD_MINES, REVEAL_CELL_COUNT } from '../ActionTypes/ActionTypes';
-import { makeGrid as makeGridAction, addMines, revealCellCount } from '../ActionTypes/Actions';
+import { resetGrid, addMines, revealCellCount } from '../ActionTypes/Actions';
 import { makeGrid, revealMines, showGameOver, addMinesToGrid, getCellAt } from '../helpers/helpers'
 import { range, sampleSize, flatten, every } from 'lodash'
 import reducer from '../reducers/gameReducer'
@@ -35,6 +34,8 @@ describe('helper functions', () => {
     const grid = makeGrid(10, 10);
     expect(grid[0][0].x).toEqual(0);
     expect(grid[0][0].y).toEqual(0);
+    expect(grid.length).toEqual(10);
+    expect(grid.every(row => row.length === 10)).toEqual(true);
   })
 
   test("test gameOver helper", () => {
@@ -111,6 +112,44 @@ describe("reducers", () => {
     let result2 = reducer(result, revealCellCount(getCellAt(3, 3, result.grid)));
 
     expect(flatten(result2.grid).filter(cell => cell.revealed).length).toEqual(1);
+
+  });
+
+  test("test that player wins game", () => {
+    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
+    let result2 = reducer(result, revealCellCount(getCellAt(3, 3, result.grid)));
+
+    expect(result2.playerWins).toEqual(true);
+
+  });
+
+  test("test that player loses game", () => {
+    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
+    let result2 = reducer(result, revealCellCount(getCellAt(3, 4, result.grid)));
+
+    expect(result2.playerWins).toEqual(false);
+
+  });
+
+
+  test("reset grid", () => {
+    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
+    let result2 = reducer(result, revealCellCount(getCellAt(3, 4, result.grid)));
+    expect(result2.playerWins).toEqual(false);
+    let result3 = reducer(result2, resetGrid(12, 12));
+
+    expect(result3.grid.length).toEqual(12);
+    expect(result3.grid.every(row => row.length === 12)).toEqual(true);
+    expect(result3.playerWins).toEqual(null);
+
+  });
+
+  test("test that game gameover state is correct if player presses on mine", () => {
+    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
+    let result2 = reducer(result, revealCellCount(getCellAt(3, 4, result.grid)));
+    expect(result2.playerWins).toEqual(false);
+    const gameState = flatten(result2).filter(cell => cell.isMine).every(cell => cell.revealed);
+    expect(gameState).toEqual(true);
 
   });
 });
