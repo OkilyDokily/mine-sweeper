@@ -1,4 +1,4 @@
-import {RESET_GRID,ADD_MINES,REVEAL_CELL_COUNT,APPLY_FLAG} from './ActionTypes';
+import {RESET_GRID,ADD_MINES,REVEAL_CELL_COUNT,APPLY_FLAG,ADD_SECOND} from './ActionTypes';
 
 export function resetGrid(x,y){
   return {
@@ -27,5 +27,12 @@ export function revealCellCount(doNot) {
   return {
     type: REVEAL_CELL_COUNT,
     doNot: doNot,
+  }
+}
+
+export function addSecond(reset) {
+  return {
+    type: ADD_SECOND,
+    reset:reset
   }
 }

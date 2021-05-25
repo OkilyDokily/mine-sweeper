@@ -10,7 +10,7 @@ const Cell = props => {
     e.preventDefault();
     const {dispatch} = props;
     if(!props.addMines){
-      dispatch(addMines(props.cell,15))
+      dispatch(addMines(props.cell,document.getElementById("mines").value))
     }
     dispatch(revealCellCount(props.cell))
   }

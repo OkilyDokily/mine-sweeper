@@ -1,31 +1,34 @@
 import { range, sampleSize, flatten } from 'lodash'
 
 export function makeGrid(x, y) {
-  return range(y).map((i) => range(x).map((j) => ({ y: i, x: j, revealed: false, flagNumber: 0, isMine: false,isFlagged:false })));
+  return range(y).map((i) => range(x).map((j) => ({ y: i, x: j, revealed: false, flagNumber: 0, isMine: false, isFlagged: false })));
 }
 
-export function playerWins(grid){
+export function playerWins(grid) {
   const flattened = flatten(grid);
-  return flattened.filter(cell => !cell.isMine).every(cell => cell.revealed);
+  const eachNonMine = flattened.filter(cell => !cell.isMine).every(cell => cell.revealed);
+  const allFlagged = flattened.filter(cell => cell.isMine).every(cell => cell.isFlagged);
+  const noFalseFlag = flattened.filter(cell => !cell.isMine).every(cell => !cell.isFlagged);
+  return (eachNonMine && allFlagged && noFalseFlag)
 }
 
-export function getCell(x,y,grid){
+export function getCell(x, y, grid) {
   return grid[y][x];
 }
 
-export function applyFlag(cell,grid){
+export function applyFlag(cell, grid) {
   return grid.map(row => row.map(c => {
-    if (c.x === cell.x && c.y ===cell.y){
-      return {...c,isFlagged: true}
+    if (c.x === cell.x && c.y === cell.y) {
+      return { ...c, isFlagged: !c.isFlagged }
     }
-    else{
+    else {
       return c;
     }
   }))
 }
 
 export function addMinesToGrid(grid, doNot, mineCount) {
-  let flattened = flatten(grid).filter( cell => cell.x !== doNot.x || cell.y !== doNot.y);
+  let flattened = flatten(grid).filter(cell => cell.x !== doNot.x || cell.y !== doNot.y);
   const results = sampleSize(flattened, mineCount);
 
 
@@ -88,12 +91,12 @@ export function revealMines(cell, grid) {
     }
   }
 
-  return go(cell,grid)
+  return go(cell, grid)
 }
 
-export function showGameOver(grid){
+export function showGameOver(grid) {
   return [...grid.map((row) => row.map((cell) =>
-    cell.isMine ? { ...cell, revealed: true,isFlagged:false } : cell))]
+    cell.isMine ? { ...cell, revealed: true, isFlagged: false } : cell))]
 }
 
 export function updateGrid(revealedMines, grid) {
