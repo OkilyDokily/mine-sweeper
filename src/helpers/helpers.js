@@ -18,7 +18,7 @@ export function getCell(x, y, grid) {
 
 export function applyFlag(cell, grid) {
   return grid.map(row => row.map(c => {
-    if (c.x === cell.x && c.y === cell.y) {
+    if (c.x === cell.x && c.y === cell.y && !c.revealed) {
       return { ...c, isFlagged: !c.isFlagged }
     }
     else {
@@ -62,7 +62,6 @@ export function getCellAt(x, y, grid) {
 export function countMines(neighbors) {
   return neighbors.filter(cell => cell.isMine).length;
 }
-
 
 
 export function revealMines(cell, grid) {

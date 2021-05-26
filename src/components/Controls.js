@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import { resetGrid, addSecond } from '../ActionTypes/Actions'
+import { resetGrid} from '../ActionTypes/Actions'
 import { flatten } from 'lodash'
-import { render } from '@testing-library/react';
-
-
 
 
 class Controls extends React.Component {
@@ -19,22 +16,41 @@ class Controls extends React.Component {
 
   restart = () => {
     const { dispatch } = this.props;
+    this.setState({ seconds: 0 })
     if (this.state.cancel !== null) {
-      clearInterval(this.state.cancel);
-      this.setState({seconds:0})
+      clearInterval(this.state.cancel); 
     }
-
-    const callSeconds = () => {
-      this.setState({ seconds: this.state.seconds + 1 })
-    }
-
-    let cancel = setInterval(function () {
-      callSeconds();
-    }, 1000)
-    this.setState({ cancel: cancel })
-    dispatch(resetGrid(document.getElementById("width").value, document.getElementById("height").value))
+    const x = document.getElementById("width").value;
+    const y = document.getElementById("height").value;
+    dispatch(resetGrid(x,y));
   }
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.timerIsOn !== this.props.timerIsOn)
+    {
+      if (!this.props.timerIsOn && this.state.cancel !== null) {
+
+        clearInterval(this.state.cancel);
+        this.setState({ cancel: null })
+      }
+
+      if (this.props.timerIsOn && this.state.cancel === null) {
+        const callSeconds = () => {
+          this.setState({ seconds: this.state.seconds + 1 })
+        }
+
+        let cancel = setInterval(function () {
+          callSeconds();
+        }, 1000)
+
+        this.setState({ cancel: cancel })
+      }
+    }
+
+  }
+
   render() {
+
+
     return (
       <div>
         <p>Mines left: {this.props.mines}</p>
@@ -58,6 +74,7 @@ const mapStateToProps = (state) => {
   return {
     hasWon: state.playerWins,
     mines: flatten(state.grid).filter(cell => cell.isMine).length - flatten(state.grid).filter(cell => cell.isFlagged).length,
+    timerIsOn: state.timerIsOn
   }
 }
 

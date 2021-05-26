@@ -1,4 +1,4 @@
-import {RESET_GRID,ADD_MINES,REVEAL_CELL_COUNT,APPLY_FLAG,ADD_SECOND} from './ActionTypes';
+import {RESET_GRID,START_GAME,REVEAL_CELL_COUNT,APPLY_FLAG} from './ActionTypes';
 
 export function resetGrid(x,y){
   return {
@@ -8,9 +8,9 @@ export function resetGrid(x,y){
   }
 }
 
-export function addMines(doNot,mineCount) {
+export function startGame(doNot,mineCount) {
   return {
-    type: ADD_MINES,
+    type: START_GAME,
     doNot: doNot,
     mineCount:mineCount
   }
@@ -27,12 +27,5 @@ export function revealCellCount(doNot) {
   return {
     type: REVEAL_CELL_COUNT,
     doNot: doNot,
-  }
-}
-
-export function addSecond(reset) {
-  return {
-    type: ADD_SECOND,
-    reset:reset
   }
 }

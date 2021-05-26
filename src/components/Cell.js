@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {addMines, revealCellCount,applyFlag} from '../ActionTypes/Actions'
+import {startGame, revealCellCount,applyFlag} from '../ActionTypes/Actions'
 
 
 
@@ -9,8 +9,8 @@ const Cell = props => {
   const handleClick = (e) => {
     e.preventDefault();
     const {dispatch} = props;
-    if(!props.addMines){
-      dispatch(addMines(props.cell,document.getElementById("mines").value))
+    if(!props.isTimerOn){
+      dispatch(startGame(props.cell,document.getElementById("mines").value))
     }
     dispatch(revealCellCount(props.cell))
   }
@@ -31,7 +31,7 @@ const Cell = props => {
 
 const mapStateToProps = (state) => {
   return  {
-    addMines: state.addMines
+    isTimerOn: state.timerIsOn
   }
 }
 
