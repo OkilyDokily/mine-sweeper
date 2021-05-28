@@ -1,3 +1,45 @@
+# _Minesweeper_
+
+#### _This demonstrates beginner level React/Redux._
+
+#### By _**Matthew LeDoux**_
+
+
+## Description
+
+_Another minesweeper clone._
+     
+## Setup/Installation Requirements
+* clone the repo
+* navigate to the repo in your terminal 
+* enter `npm install` (this will install the necessary packages)
+* enter `npm start` this will start the program
+
+_See the getting started with react app section for more info_
+
+## Known Bugs
+
+_I don't think there are any bugs but please tell me if you see any._
+
+## Support and contact details
+
+_Open a Github issue if you see a problem or have questions_
+
+## Technologies Used
+
+_React, HTML, CSS, Javascript_
+
+## Component Graph
+<img src="./Diagram.png"
+     alt="component diagram"
+     style="float: left; margin-right: 10px;" />
+
+### License
+
+*Feel free to use this code as you please*
+
+Copyright (c) 2020 **_Matthew LeDoux_**
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
