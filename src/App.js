@@ -6,10 +6,11 @@ function App() {
     <div id="app">
       <h1>Minesweeper</h1>
       <div id="instructions">
-        <p>Click on a tile to get started</p>
-        <p>Right click to add a flag</p>
-        <p>Avoid the bombs</p>
-        <p>The number tells you how many bombs are nereby</p>
+        <p>Click on a tile to get started.</p>
+        <p>Right click to add a flag.</p>
+        <p>Avoid the bombs.</p>
+        <p>The number tells you how many bombs are nereby.</p>
+        <p>No mines ever on the first click</p>
       </div>
      
       <Game/>
