@@ -12,14 +12,17 @@ function gameReducer(state = initial, action) {
     case RESET_GRID:
       return { ...state, grid: makeGrid(action.width, action.height), playerWins: null, timerIsOn: false }
     case START_GAME:
-      return { ...state, grid: addMinesToGrid(state.grid, action.doNot, action.mineCount), timerIsOn: true }
+      if (state.playerWins === null) {
+        return { ...state, grid: addMinesToGrid(state.grid, action.doNot, action.mineCount), timerIsOn: true }
+      }
+      return state;
     case APPLY_FLAG:
       if (state.playerWins === null) {
         const newGrid = applyFlag(action.cell, state.grid)
         const playerWinsResult = playerWins(newGrid) ? true : null
-      
+
         const timerIsOn = ((playerWinsResult === true) ? false : true);
-        return { ...state, grid: newGrid, playerWins: playerWinsResult, timerIsOn: timerIsOn}
+        return { ...state, grid: newGrid, playerWins: playerWinsResult, timerIsOn: timerIsOn }
       }
       return state;
     case REVEAL_CELL_COUNT:
@@ -29,8 +32,8 @@ function gameReducer(state = initial, action) {
           const updatedGrid = updateGrid(result, state.grid)
           const playerWinsResult = playerWins(updatedGrid) ? true : null;
           const timerIsOn = ((playerWinsResult === true) ? false : true);
-    
-          return { ...state, grid: updatedGrid, playerWins: playerWinsResult, timerIsOn:timerIsOn}
+
+          return { ...state, grid: updatedGrid, playerWins: playerWinsResult, timerIsOn: timerIsOn }
         }
         else {
           return { ...state, grid: showGameOver(state.grid), playerWins: false, timerIsOn: false };

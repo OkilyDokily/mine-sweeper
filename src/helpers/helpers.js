@@ -101,5 +101,5 @@ export function showGameOver(grid) {
 export function updateGrid(revealedMines, grid) {
   return [...grid.map((row) => row.map((cell) =>
     revealedMines.some((value) => cell.x === value.x && cell.y === value.y)
-      ? { ...cell, revealed: true, flagNumber: cell.flagNumber } : cell))]
+      ? { ...cell, revealed: true, flagNumber: cell.flagNumber,isFlagged:false} : cell))]
 }
