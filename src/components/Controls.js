@@ -83,12 +83,12 @@ class Controls extends React.Component {
         <button onClick={this.restart} id="restart">Reset Grid</button>
         <div className="inputdiv width">
           <label>width: </label>
-          <input id="width" type="number" onChange={this.rerenderGrid} defaultValue="10" min="5" placeholder="width" />
+          <input id="width" type="number" onChange={this.rerenderGrid} defaultValue="10" min="5" max="40" placeholder="width" />
         </div>
 
         <div className="inputdiv height">
           <label>height:</label>
-          <input id="height" type="number" onChange={this.rerenderGrid} defaultValue="10" min="5" placeholder="height" />
+          <input id="height" max="40" type="number" onChange={this.rerenderGrid} defaultValue="10" min="5" placeholder="height" />
         </div>
         <div className="inputdiv mines">
           <label>mines:</label>

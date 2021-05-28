@@ -85,6 +85,10 @@
   margin:auto;
 }
 
+#instructions p{
+  font-size: smaller;
+}
+
 .inputdiv label{
   display:block;  
   margin-right: 10px;
