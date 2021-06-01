@@ -1,6 +1,6 @@
-import { resetGrid, addMines, revealCellCount } from '../ActionTypes/Actions';
-import { makeGrid, revealMines, showGameOver, addMinesToGrid, getCellAt } from '../helpers/helpers'
-import { range, sampleSize, flatten, every } from 'lodash'
+import { resetGrid, startGame, revealCellCount } from '../ActionTypes/Actions';
+import { makeGrid, revealMines, showGameOver,addMinesToGrid, getCellAt, applyFlag } from '../helpers/helpers'
+import { range, flatten, every } from 'lodash'
 import reducer from '../reducers/gameReducer'
 
 describe('helper functions', () => {
@@ -47,7 +47,7 @@ describe('helper functions', () => {
     expect(flatten(result).filter(cell => cell.isMine && cell.revealed).length).toEqual(50);
   });
 
-  test("addMines", () => {
+  test("startGame", () => {
     const grid = range(10).map(i => range(10).map(j => ({ y: i, x: j, revealed: false, flagNumber: 0, isMine: false })));
 
     const doNot = { x: 3, y: 3 };
@@ -64,7 +64,7 @@ describe('helper functions', () => {
 
   })
 
-  test("addMines 2", () => {
+  test("startGame 2", () => {
     const grid = range(10).map((_, index) => range(10).map((_, index2) => ({ y: index, x: index2, revealed: false, flagNumber: 0, isMine: false })));
     const result = addMinesToGrid(grid, { x: 3, y: 3 }, 90);
     expect(flatten(result).filter(cell => cell.isMine).length).toEqual(90);
@@ -72,7 +72,7 @@ describe('helper functions', () => {
   })
 
 
-  test("addMines 3", () => {
+  test("startGame 3", () => {
     const grid = range(10).map((_, index) => range(10).map((_, index2) => ({ y: index, x: index2, revealed: false, flagNumber: 0, isMine: false })));
 
     const result = addMinesToGrid(grid, { x: 3, y: 3 }, 99);
@@ -85,14 +85,14 @@ describe('helper functions', () => {
 
 describe("reducers", () => {
   test("return state as expected", () => {
-    let result = reducer(undefined, addMines({ x: 3, y: 3 }, 99));
+    let result = reducer(undefined,startGame({ x: 3, y: 3 }, 99));
     expect(result.grid.length).toEqual(10);
     expect(result.grid.every(row => row.length === 10)).toEqual(true);
     expect(result.grid.every(row => every(cell => cell.isMine === false))).toEqual(true);
   });
 
   test(("add mines"), () => {
-    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
+    let result = reducer(undefined,startGame({ x: 3, y: 3, isMine: false }, 99));
 
     expect(flatten(result.grid).filter(cell => cell.isMine).length).toEqual(99);
     expect(result.grid[3][3].isMine).toEqual(false);
@@ -100,7 +100,7 @@ describe("reducers", () => {
   });
 
   test("robustness test for recursive helper reducer", () => {
-    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 0));
+    let result = reducer(undefined,startGame({ x: 3, y: 3, isMine: false }, 0));
     let result2 = reducer(result, revealCellCount(getCellAt(3, 3, result.grid)));
 
     expect(flatten(result2.grid).filter(cell => cell.revealed).length).toEqual(100);
@@ -108,23 +108,16 @@ describe("reducers", () => {
   });
 
   test("robustness test for recursive helper reducer 2", () => {
-    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
+    let result = reducer(undefined,startGame({ x: 3, y: 3, isMine: false }, 99));
     let result2 = reducer(result, revealCellCount(getCellAt(3, 3, result.grid)));
 
     expect(flatten(result2.grid).filter(cell => cell.revealed).length).toEqual(1);
 
   });
 
-  test("test that player wins game", () => {
-    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
-    let result2 = reducer(result, revealCellCount(getCellAt(3, 3, result.grid)));
-
-    expect(result2.playerWins).toEqual(true);
-
-  });
 
   test("test that player loses game", () => {
-    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
+    let result = reducer(undefined,startGame({ x: 3, y: 3, isMine: false }, 99));
     let result2 = reducer(result, revealCellCount(getCellAt(3, 4, result.grid)));
 
     expect(result2.playerWins).toEqual(false);
@@ -133,7 +126,7 @@ describe("reducers", () => {
 
 
   test("reset grid", () => {
-    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
+    let result = reducer(undefined,startGame({ x: 3, y: 3, isMine: false }, 99));
     let result2 = reducer(result, revealCellCount(getCellAt(3, 4, result.grid)));
     expect(result2.playerWins).toEqual(false);
     let result3 = reducer(result2, resetGrid(12, 12));
@@ -145,7 +138,7 @@ describe("reducers", () => {
   });
 
   test("test that game gameover state is correct if player presses on mine", () => {
-    let result = reducer(undefined, addMines({ x: 3, y: 3, isMine: false }, 99));
+    let result = reducer(undefined,startGame({ x: 3, y: 3, isMine: false }, 99));
     let result2 = reducer(result, revealCellCount(getCellAt(3, 4, result.grid)));
     expect(result2.playerWins).toEqual(false);
     const gameState = flatten(result2).filter(cell => cell.isMine).every(cell => cell.revealed);

@@ -101,7 +101,8 @@ class Controls extends React.Component {
 };
 
 Controls.propTypes = {
-
+  mines:PropTypes.array,
+  timerIsOn:PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {

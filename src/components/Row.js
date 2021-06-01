@@ -11,7 +11,7 @@ const Row = props => {
 };
 
 Row.propTypes = {
-  
+  row:PropTypes.array
 };
 
 export default Row;

@@ -20,6 +20,6 @@ const mapStateToProps = (state) => {
 }
 
 MinesweeperField.propTypes = {
-  
+    grid:PropTypes.array,
 };
 export default connect(mapStateToProps)(MinesweeperField);

@@ -40,7 +40,8 @@ const mapStateToProps = (state) => {
 }
 
 Cell.propTypes = {
-
+  cell:PropTypes.object,
+  isTimerOn:PropTypes.bool,
 };
 
 export default connect(mapStateToProps)(Cell);
